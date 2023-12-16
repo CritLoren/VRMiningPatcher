@@ -1,10 +1,10 @@
 {
   "Nickname": "Mining for VR Patcher",
   "Visibility": "Visible",
-  "OneLineDescription": "Patches all ore activators to use the VR mining mod's script",
-  "LongDescription": "",
+  "OneLineDescription": "Patches all ore activators to use the script from Realistic Mining and Chopping VR. Replaces the need for the ESP, but you still need the scripts!",
+  "LongDescription": "Patches all ore activators to use the script from Realistic Mining and Chopping VR. Removing the existing overrides from the base plugin is recommended to spare you the conflict management. Replaces the need for the ESP, but you still need the scripts!",
   "PreferredAutoVersioning": "LatestTag",
-  "RequiredMods": ["RealisticMiningAndChoppingVR.esp"],
+  "RequiredMods": [],
   "TargetedReleases": [
     "SkyrimLE",
     "SkyrimSE",

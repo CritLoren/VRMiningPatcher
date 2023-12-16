@@ -1,0 +1,16 @@
+{
+  "Nickname": "Mining for VR Patcher",
+  "Visibility": "IncludeButHide",
+  "OneLineDescription": "Patches all ore activators to use the VR mining mod's script",
+  "LongDescription": "",
+  "PreferredAutoVersioning": "LatestTag",
+  "RequiredMods": ["RealisticMiningAndChoppingVR.esp"],
+  "TargetedReleases": [
+    "SkyrimLE",
+    "SkyrimSE",
+    "SkyrimVR",
+    "EnderalLE",
+    "EnderalSE",
+    "SkyrimSEGog"
+  ]
+}

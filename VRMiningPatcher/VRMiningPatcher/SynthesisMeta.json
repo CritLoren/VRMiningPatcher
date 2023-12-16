@@ -1,6 +1,6 @@
 {
   "Nickname": "Mining for VR Patcher",
-  "Visibility": "IncludeButHide",
+  "Visibility": "Visible",
   "OneLineDescription": "Patches all ore activators to use the VR mining mod's script",
   "LongDescription": "",
   "PreferredAutoVersioning": "LatestTag",

@@ -18,9 +18,12 @@ namespace VRMiningPatcher
                 .Run(args);
         }
 
-        private static FormLink<ISoundGetter> PickaxeSound = new FormLink<ISoundGetter>(
-            ModKey.FromNameAndExtension("RealisticMiningAndChoppingVR.esp").MakeFormKey(0x001856)
-        );
+        private static FormLink<ISoundGetter> PickaxeSound =
+            new(
+                ModKey
+                    .FromNameAndExtension("RealisticMiningAndChoppingVR.esp")
+                    .MakeFormKey(0x001857)
+            );
 
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
@@ -39,29 +42,23 @@ namespace VRMiningPatcher
                 )
                     continue;
 
-                Console.WriteLine($"Found {Activator.EditorID} ...");
-
-                // Create a new COBJ record with the modified conditions
-                IActivatorGetter modifiedACTI = state
-                    .PatchMod
-                    .Activators
-                    .GetOrAddAsOverride(Activator);
-
-                // Sanity checks to skip unnecessary processing
+                // Deep copy existing record to edit
+                var modifiedACTI = Activator.DeepCopy();
                 if (modifiedACTI.VirtualMachineAdapter == null)
                     continue;
 
-                var Script = modifiedACTI.VirtualMachineAdapter.Scripts[
-                    modifiedACTI
-                        .VirtualMachineAdapter
-                        .Scripts
-                        .FindIndex<IScriptEntryGetter, string>(e => e.Name == "MineOreScript")
-                ];
+                Console.WriteLine($"Found {Activator.EditorID} ...");
 
-                var NewScript = Script.DeepCopy();
-                NewScript.Name = "VR_MineOreScript";
+                // Get index of script with MineOreScript name
+                int index = modifiedACTI
+                    .VirtualMachineAdapter
+                    .Scripts
+                    .FindIndex<IScriptEntryGetter, string>(e => e.Name == "MineOreScript");
+                var Script = modifiedACTI.VirtualMachineAdapter.Scripts[index];
 
-                NewScript
+                // Swap the script name and add the necessary properties
+                Script.Name = "VR_MineOreScript";
+                Script
                     .Properties
                     .Add(
                         new ScriptObjectProperty
@@ -71,8 +68,7 @@ namespace VRMiningPatcher
                             Object = PickaxeSound
                         }
                     );
-
-                NewScript
+                Script
                     .Properties
                     .Add(
                         new ScriptIntProperty
@@ -83,9 +79,11 @@ namespace VRMiningPatcher
                         }
                     );
 
-                // This doesn't actually work
-                modifiedACTI.VirtualMachineAdapter.Scripts.AsList().Remove(Script);
-                modifiedACTI.VirtualMachineAdapter.Scripts.Append(NewScript);
+                // Swap existing script with the modified script
+                modifiedACTI.VirtualMachineAdapter.Scripts[index] = Script;
+
+                // Apply changes
+                state.PatchMod.Activators.Set(modifiedACTI);
             }
         }
     }
